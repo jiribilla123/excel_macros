@@ -20,7 +20,7 @@ Sub Imprimir()
         End If
     Next cell
     
-        ' Limpiar coulmna de cantidades
+        ' El número de guía aparece en la misma columna de cantidades
     Set rng = ws.Range("B1:B10000")
 
     For Each cell In rng
@@ -58,20 +58,23 @@ Sub Imprimir()
     lastRow = ws.Cells(ws.Rows.Count, keyColumn).End(xlUp).Row
     errorText = "Pendiente"
     lookupRange = "'Sheet2'!C:H"
-    
+
+    ' Buscar ubicación en reporte de inventario (hoja2) saltando celdas sin contenido
     For i = 3 To lastRow
         If ws.Cells(i, keyColumn).Value <> "" Then
         ws.Cells(i, formulaColumn).Formula = "=IFERROR(VLOOKUP(" & keyColumn & i & "," & lookupRange & ", 6, FALSE), """ & errorText & """)"
         End If
     Next i
     
-    ' Ajustar texto y borrar primera linea
+    ' Ultimos ajustes para imprimir
     
     ws.Columns("A:D").AutoFit
     Columns("A:B").Select
     Selection.HorizontalAlignment = xlCenter
     Rows("1:1").Select
     Selection.Delete Shift:=xlUp
-    ActiveSheet.PrintPreview
+
+    ' Imprimir. Lo dejo comentado porque en MAC se va directamente a imprimir sin preview
+    ' ActiveSheet.PrintPreview
     
 End Sub
